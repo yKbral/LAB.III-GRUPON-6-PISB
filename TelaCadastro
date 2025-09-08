@@ -1,0 +1,136 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Champion Dreams — Cadastro</title>
+  <style>
+    :root{
+      --bg:#0b0b0b;
+      --panel:#0f0f0f;
+      --accent:#ff6a00;
+      --muted:#bdbdbd;
+      --radius:12px;
+      font-family: Inter, ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial;
+    }
+    *{box-sizing:border-box}
+    body{margin:0;background:#0b0b0b;color:#fff;display:flex;align-items:center;justify-content:center;min-height:100vh;padding:24px}
+
+    .panel{
+      background:linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01));
+      padding:28px;
+      border-radius:var(--radius);
+      box-shadow:0 10px 30px rgba(0,0,0,0.6);
+      border:1px solid rgba(255,255,255,0.04);
+      width:100%;
+      max-width:480px;
+    }
+
+    h2{margin:0 0 12px 0}
+    p{margin:0 0 18px 0;color:var(--muted);font-size:14px}
+
+    form{display:grid;gap:12px}
+    label{font-size:13px;color:var(--muted);display:block;margin-bottom:6px}
+    input,select{
+      width:100%;
+      padding:12px 14px;
+      background:#1a1a1a;
+      border:1px solid rgba(255,255,255,0.06);
+      color:#fff;
+      border-radius:8px;
+      outline:none;
+      transition:border-color .12s, background .12s;
+    }
+    input:focus,select:focus{border-color:var(--accent);background:#111}
+    select{color:var(--accent);font-weight:600}
+
+    button{
+      background:linear-gradient(90deg,var(--accent), #ff8a33);
+      border:none;color:#0b0b0b;padding:12px 16px;border-radius:10px;font-weight:700;cursor:pointer;
+      box-shadow:0 6px 18px rgba(255,106,0,0.12);
+      width:100%;
+    }
+    .actions{display:flex;justify-content:center;align-items:center;margin-top:6px;font-size:13px}
+    .link{color:var(--accent);text-decoration:none;font-weight:600}
+  </style>
+</head>
+<body>
+  <div class="panel">
+    <h2>Cadastro — Champion Dreams</h2>
+    <p>Crie sua conta como <strong>Cliente</strong> ou <strong>Booster</strong>.</p>
+    <form id="registerForm" onsubmit="return false;">
+      <div>
+        <label for="role">Tipo de Usuário</label>
+        <select id="role" required>
+          <option value="" disabled selected>Selecione...</option>
+          <option value="cliente">Cliente</option>
+          <option value="booster">Booster</option>
+        </select>
+      </div>
+      <div>
+        <label for="nome">Nome Completo</label>
+        <input id="nome" type="text" placeholder="Seu nome" required />
+      </div>
+      <div>
+        <label for="email">E-mail</label>
+        <input id="email" type="email" placeholder="seu@exemplo.com" required />
+      </div>
+      <div id="cpfContainer" style="display:none;">
+        <label for="cpf">CPF (apenas Boosters)</label>
+        <input id="cpf" type="text" placeholder="000.000.000-00" pattern="\\d{3}\\.\\d{3}\\.\\d{3}-\\d{2}" />
+      </div>
+      <div>
+        <label for="senha">Senha</label>
+        <input id="senha" type="password" placeholder="••••••••" required minlength="6" />
+      </div>
+      <div>
+        <label for="confirmarSenha">Confirmar Senha</label>
+        <input id="confirmarSenha" type="password" placeholder="••••••••" required minlength="6" />
+      </div>
+      <button id="registerBtn">Cadastrar</button>
+      <div class="actions">
+        Já possui conta? <a href="#" class="link">Fazer login</a>
+      </div>
+    </form>
+  </div>
+
+  <script>
+    const roleSelect = document.getElementById('role');
+    const cpfContainer = document.getElementById('cpfContainer');
+    const cpfInput = document.getElementById('cpf');
+
+    roleSelect.addEventListener('change',()=>{
+      if(roleSelect.value === 'booster'){
+        cpfContainer.style.display = 'block';
+        cpfInput.required = true;
+      } else {
+        cpfContainer.style.display = 'none';
+        cpfInput.required = false;
+      }
+    });
+
+    document.getElementById('registerBtn').addEventListener('click',()=>{
+      const role = roleSelect.value;
+      const nome = document.getElementById('nome').value;
+      const email = document.getElementById('email').value;
+      const senha = document.getElementById('senha').value;
+      const confirmar = document.getElementById('confirmarSenha').value;
+      const cpf = cpfInput.value;
+
+      if(!role || !nome || !email || !senha || !confirmar){
+        alert('Preencha todos os campos obrigatórios.');
+        return;
+      }
+      if(senha !== confirmar){
+        alert('As senhas não coincidem.');
+        return;
+      }
+      if(role === 'booster' && !cpf){
+        alert('Informe o CPF para cadastro como Booster.');
+        return;
+      }
+      alert('Cadastro realizado como '+role+' (simulado)');
+    });
+  </script>
+</body>
+</html>
